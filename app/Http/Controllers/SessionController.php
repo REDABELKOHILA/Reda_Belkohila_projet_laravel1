@@ -3,23 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\Return_;
 
 class SessionController extends Controller
 {
-    public function AfficherFormulaire(){
-        Return view("formulaire.form");
-
+    public function afficherFormulaire()
+    {
+        return view('formulaire.form');
     }
 
-    public  function TriterFormulire(Request $request){
-        $data =$request->only(['non', 'prenom', 'email', 'password', 'date_naissance', 'abonne']);
-        session(['user' => $data]);
-
-        return redirect()->back()->with('+++++++++');
-
-        
-
-
-        }
+    public function traiterFormulaire(Request $request)
+    {
+        $request->validate([
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'email' => 'required|email',
+            'mot_de_passe' => 'required|string',
+            'fichier' => 'required|file',
+            'date_naissance' => 'required|date',
+            'abonne' => 'required|in:oui,non',
+        ]);
+    
+        // Move the uploaded file to a permanent location
+        $fichierChemin = $request->file('fichier')->store('files', 'public');
+    
+        // Store the file path in session or database
+        $donnees = $request->except('fichier');
+        $donnees['fichier_chemin'] = $fichierChemin;
+        session(['arganiers' => $donnees]);
+        session()->flash('nenuge', 'Bienvenue');
+    
+        return redirect()->route('afficherSession');
+    }
+    
 }

@@ -1,18 +1,19 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\BiblioController;
-use App\Http\Controllers\BookController;
-use App\Http\Controllers\EmailController;
-use App\Http\Controllers\EmployeController;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\homeController;
-use App\Http\Controllers\ProductController;
 use App\Models\ExembleModel;
-use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookController;
+
+use App\Http\Controllers\homeController;
+use App\Http\Middleware\VerifyCsrfToken;
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\BiblioController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\EmployeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,7 +117,14 @@ Route::get('/age/{age}' , function(){
 
 Route::get('/event', [EmailController::class,"send"]);
 
+//-----------------------------------------------------------
+Route::get('/newFormulaire', [SessionController::class, 'afficherFormulaire'])->name('afficherFormulaire');
+Route::post('/traiter', [SessionController::class, 'traiterFormulaire'])->name('traiterFormulaire');
+Route::get('/afficherSession', function () {
+    return view('formulaire.affichage_session');
+})->name('afficherSession');
 
+//-------------------------------------------------------
 
 
 // Route::middleware(['auth'])->prefix('admin')->group(function(){
